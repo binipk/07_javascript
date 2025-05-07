@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>id를 이용한 노드 취득</h1>
+
+    <!-- ✅ id는 문서 안에서 '하나만' 써야 해요! -->
+    <div id="area1" class="area">
+        div 영역
+        <p id="area2">p 영역</p>
+    </div>
+
+    <!-- ❌ id는 중복되면 안됨! 아래 div는 id를 바꿔줍니다 -->
+    <div id="area3" class="area">
+        div 영역 (두 번째)
+    </div>
+
+    <script>
+        // ✅ 방법 1: getElementById()
+        // → id가 'area1'인 요소 하나를 가져옵니다
+        const $elemById = document.getElementById("area1");
+        console.log("getElementById:", $elemById);
+        $elemById.style.backgroundColor = "skyblue";
+
+        // ✅ 방법 2: querySelector()
+        // → CSS 선택자 방식, #area1은 id 선택자 (#은 필수)
+        const $elemByQS = document.querySelector("#area1");
+        console.log("querySelector:", $elemByQS);
+
+        // ✅ p 태그도 id로 가져올 수 있어요
+        const $p = document.getElementById("area2");
+        console.log("id가 area2인 p 태그:", $p);
+
+        // ❗ getElementById는 id 중복이 있으면 먼저 나오는 요소만 반환
+        // → 따라서 id는 항상 고유하게 만들어야 함!
+
+        // ✅ class로 가져오고 싶다면?
+        // querySelectorAll(".area") → 클래스명이 area인 모든 요소 가져오기
+        const $areas = document.querySelectorAll(".area");
+        console.log("클래스가 area인 요소들:", $areas);
+
+        // 반복문으로 각 요소 확인
+        $areas.forEach((el, i) => {
+            console.log(`area[${i}]`, el);
+        });
+    </script>
+</body>
+</html>

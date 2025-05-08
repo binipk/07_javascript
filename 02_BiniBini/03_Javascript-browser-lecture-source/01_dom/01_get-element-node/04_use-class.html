@@ -1,79 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>class 선택자 정리</title>
-</head>
-<body>
-  <h1>✅ class명을 이용한 요소 선택</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>class를 이용한 요소 노드 취득</h1>
+    <ul id="available">
+      <li class="drink coffee">커피</li>
+      <li class="drink coke">콜라</li>
+      <li class="drink milk">우유</li>
+    </ul>
+    <ul id="unavailable">
+      <li class="drink soju">소주</li>
+      <li class="drink beer">맥주</li>
+    </ul>
+    <script>
+      const $drinks = document.getElementsByClassName("drink");
+      console.log($drinks);
 
-  <p>
-    <strong>📌 getElementsByClassName("클래스명")</strong><br>
-    👉 해당 class를 가진 모든 요소들을 <u>HTMLCollection</u>으로 반환<br>
-    👉 같은 class명이 여러 요소에 쓰여도 <u>모두 선택</u> 가능 (중복 허용)<br>
-    👉 반환된 HTMLCollection은 <u>배열처럼 생겼지만 forEach 안 됨</u><br>
-    👉 배열로 바꾸려면 <code>[...컬렉션]</code> 또는 <code>Array.from(컬렉션)</code> 사용
-  </p>
+      // Array.from($drinks).forEach((drink) => (drink.style.color = "red"));
+      [...$drinks].forEach((drink) => (drink.style.color = "pink"));
 
-  <hr />
+      const $coffee = document.getElementsByClassName("drink coffee");
+      console.log($coffee);
 
-  <!-- ✅ 판매 중인 음료 -->
-  <h2>판매 중인 음료</h2>
-  <ul id="available">
-    <li class="drink coffee">☕ 커피</li>
-    <li class="drink coke">🥤 콜라</li>
-    <li class="drink milk">🥛 우유</li>
-  </ul>
+      const $avaiable = document.getElementById("unavailable");
+      const $avaiableDrinks = $avaiable.getElementsByClassName("drink");
 
-  <!-- ✅ 판매 중단된 음료 -->
-  <h2>판매 중단된 음료</h2>
-  <ul id="unavailable">
-    <li class="drink soju">🍶 소주</li>
-    <li class="drink beer">🍺 맥주</li>
-  </ul>
+      const $soju = $avaiable.getElementsByClassName("soju");
+      console.log($soju);
 
-  <!-- ✅ 기타 항목 -->
-  <h2>기타 항목</h2>
-  <ul id="other">
-    <li class="coffee">❌ 커피 전용 머그잔</li>
-    <li class="beer">❌ 맥주잔</li>
-  </ul>
-
-  <script>
-    // ✅ 예제 1: 'drink' 클래스 선택 (모든 음료 li 선택됨)
-    const $drinks = document.getElementsByClassName("drink");
-    console.log("drink 클래스 선택:", $drinks); // HTMLCollection(5)
-
-    // ⚠️ forEach는 안 먹힘 → 배열로 변환해야 함
-    [...$drinks].forEach((el) => {
-      el.style.color = "deeppink";  // 글자색 변경
-      el.style.fontWeight = "bold"; // 굵게
-    });
-
-    // ✅ 예제 2: 'coffee' 클래스만 선택 (커피, 커피잔)
-    const $coffee = document.getElementsByClassName("coffee");
-    console.log("coffee 클래스 선택:", $coffee); // HTMLCollection(2)
-
-    Array.from($coffee).forEach((el) => {
-      el.style.backgroundColor = "#ffe9e9"; // 연한 빨강 배경
-    });
-
-    // ✅ 예제 3: 'beer' 클래스 선택 (맥주, 맥주잔)
-    const $beer = document.getElementsByClassName("beer");
-    [...$beer].forEach((el) => {
-      el.style.backgroundColor = "#e5faff"; // 연한 파랑 배경
-    });
-
-    // ✅ 예제 4: 'milk' 클래스 선택 (우유만 해당)
-    const $milk = document.getElementsByClassName("milk");
-    if ($milk.length > 0) {
-      $milk[0].style.border = "2px solid hotpink"; // 테두리
-    }
-
-    // ✅ 예제 5: 없는 클래스 선택하면?
-    const $nonExistent = document.getElementsByClassName("nonexistent");
-    console.log("nonexistent 클래스 선택:", $nonExistent); // HTMLCollection(0)
-  </script>
-</body>
+      const test = document.querySelectorAll("#unavailable>.soju");
+      console.log("test >>>", test);
+    </script>
+  </body>
 </html>

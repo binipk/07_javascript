@@ -1,74 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Document</title>
-</head>
-<body>
-  <h1>태그 이름을 이용한 요소 취득</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>태그 이름을 이용한 요소 취득</h1>
+    <ul id="food">
+      <li>김치찌개</li>
+      <li>된장찌개</li>
+      <li>고등어구이</li>
+    </ul>
+    <ul id="drink">
+      <li>커피</li>
+      <li>콜라</li>
+      <li>우유</li>
+    </ul>
+    <script>
+      const $lists = document.getElementsByTagName("li");
+      console.log($lists);
+      console.log($lists.length);
 
-  <!-- 음식 리스트 -->
-  <ul id="food">
-    <li>김치찌개</li>
-    <li>된장찌개</li>
-    <li>고등어구이</li>
-  </ul>
+      $lists[0].style.backgroundColor = "red";
 
-  <!-- 음료 리스트 -->
-  <ul id="drink">
-    <li>커피</li>
-    <li>콜라</li>
-    <li>우유</li>
-  </ul>
+      let changeColor = 0;
+      for (let i = 0; i < $lists.length; i++) {
+        $lists[i].style.backgroundColor = "rgb(130, 220, " + changeColor + ")";
+        changeColor += 50;
+      }
 
-  <script>
-    // ✅ 1. 전체 문서에서 <li> 태그 모두 선택
-    const $lists = document.getElementsByTagName("li"); 
-    // → HTMLCollection(6): 김치찌개~우유까지 6개
-    console.log($lists);
-    console.log($lists.length); // 6
+      [...$lists].forEach((list) => (list.style.color = "white"));
 
-    // ✅ 2. 첫 번째 li 요소에 배경색 지정
-    $lists[0].style.backgroundColor = "#2189ff"; // 파란 배경
+      const $drink = document.getElementById("drink");
+      const $listsFromDrink = $drink.getElementsByTagName("li");
 
-    // ✅ 3. 모든 li의 배경색을 점점 밝게 변경
-    let changeColor = 0;
-    for (let i = 0; i < $lists.length; i++) {
-      $lists[i].style.backgroundColor = `rgb(130, 220, ${changeColor})`;
-      changeColor += 50;
-    }
+      console.log($listsFromDrink);
 
-    // ✅ 4. 글자색을 하얀색으로 변경 (HTMLCollection은 배열 아님!)
-    [...$lists].forEach((list) => {
-      list.style.color = "white";
-    });
+      [...$listsFromDrink].forEach((list) => (list.style.color = "blue"));
+      // const test = document.querySelectorAll("li");
+      // test.forEach((list) => (list.style.color = "red"));
+      //  $lists.forEach((list) => (list.style.color = "red")); 오류가 나니깐 아래와같이 변경
+      // 방법1
+      Array.from($lists).forEach((list) => (list.style.color = "pink"));
+      // 방법2
+      [...$lists].forEach((list) => (list.style.color = "hotpink"));
 
-    // ✅ 5. 특정 영역에서만 <li> 선택: drink 영역
-    const $drink = document.getElementById("drink");
-    const $listsFromDrink = $drink.getElementsByTagName("li");
-    console.log($listsFromDrink); // 커피~우유 3개
-
-    // ✅ 6. 다시 모든 li 글자색을 파란색으로 변경
-    [...$lists].forEach((list) => {
-      list.style.color = "blue";
-    });
-
-    // ✅ 7. querySelectorAll로 모든 li 선택 후 글자색 노랑
-    // querySelectorAll은 NodeList를 반환 (forEach 사용 가능)
-    const test = document.querySelectorAll("li");
-    test.forEach((list) => (list.style.color = "yellow"));
-
-    // ✅ 8. HTMLCollection은 forEach 안 됨 → 배열로 변환 후 사용
-    // 방법 1: Array.from() 사용
-    Array.from($lists).forEach((list) => (list.style.color = "pink"));
-
-    // 방법 2: 스프레드 연산자 사용
-    [...$lists].forEach((list) => (list.style.color = "hotpink"));
-
-    // ✅ 9. getElementsByName()은 name 속성을 기준으로 요소를 찾음
-    // → 지금 문서에는 name="a"를 가진 요소가 없음 → 빈 NodeList 반환
-    const $noElem = document.getElementsByName("a");
-    console.log($noElem); // NodeList(0)
-  </script>
-</body>
+      const $noElem = document.getElementsByName("a");
+      console.log($noElem);
+    </script>
+  </body>
 </html>

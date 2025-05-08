@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Axios 사용 예제</title>
+
+  <!-- ✅ axios 라이브러리 불러오기 (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+  <script>
+    // ✅ axios.get(URL) → 해당 주소로 GET 요청을 보냄 (Promise 반환)
+    axios
+      .get('https://jsonplaceholder.typicode.com/users')  // 사용자 목록 요청
+      .then((response) => {
+        // ✅ 응답 전체 객체 출력
+        console.log(response);  
+
+        // ✅ 진짜 중요한 데이터는 response.data에 들어 있음
+        console.log(response.data);  // 사용자 목록 배열
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>이벤트 위임</title>
+  <style>
+    .highlight {
+      background-color: yellow;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>이벤트 위임</h1>
+
+  <p>
+    여러 개의 요소에 각각 이벤트를 다는 대신,<br>
+    공통 부모(조상) 요소에 하나의 이벤트 핸들러만 등록해서 처리하는 방법을<br>
+    <strong>이벤트 위임</strong>이라고 해.
+  </p>
+
+  <ul id="drink">
+    <li>커피</li>
+    <li>콜라</li>
+    <li>우유</li>
+  </ul>
+
+  <script>
+    // 1. 공통 부모 요소인 <ul> 선택
+    const $drink = document.getElementById('drink');
+
+    // 2. <ul> 하나에만 클릭 이벤트 등록
+    $drink.addEventListener('click', (e) => {
+      // 3. 클릭된 대상이 <li>인지 확인 (부모인 <ul>이 클릭된 경우 제외하기 위해)
+      if (e.target.matches('li')) {
+        highlight(e.target); // 클릭한 li 요소를 전달해서 처리
+      }
+    });
+
+    // 4. 클래스 toggle 함수 → 있으면 제거, 없으면 추가
+    function highlight(li) {
+      li.classList.toggle('highlight');
+    }
+  </script>
+</body>
+</html>

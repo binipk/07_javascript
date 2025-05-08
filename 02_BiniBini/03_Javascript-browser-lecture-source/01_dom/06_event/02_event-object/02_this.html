@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>이벤트 핸들러 내부의 this</h1>
+    
+    <p>
+        어트리뷰트 방식의 경우 이벤트 핸들러에 의해 일반 함수로 호출되고<br>
+        일반 함수 내부의 this는 전역 객체 window를 가리킨다.<br>
+        이벤트 핸들러 호출 시 인수로 전달한 this는 이벤트를 바인딩한 DOM 요소를 가리킨다.
+    </p>
+
+    <!-- 일반 함수로 호출되기 때문에 this는 window -->
+    <button onclick="handleClick1()">클릭해보세요!</button>
+
+    <!-- this를 명시적으로 넘기면 DOM 요소를 직접 전달받음 -->
+    <button onclick="handleClick2(this)" value="123">
+        클릭해보세요!
+    </button>
+
+    <script>
+        function handleClick1() {
+            console.log('handleClick1 - this:', this); // window (어트리뷰트 방식은 일반 함수 호출)
+        }
+
+        function handleClick2(param) {
+            console.log('handleClick2 - param(this):', param); // <button ...>
+            console.log('handleClick2 - param.value:', param.value); // 123
+        }
+    </script>
+
+    <p>
+        이벤트 핸들러 프로퍼티 방식과 addEventListener 방식 모두 이벤트 핸들러<br>
+        내부의 this는 이벤트를 바인딩한 DOM 요소를 가리킴<br>
+        (단, 화살표 함수는 예외 — 상위 스코프의 this를 유지)
+    </p>
+
+    <button id="btn1">Click it</button>
+    <button id="btn2">Click it</button>
+
+    <script>
+        const $btn1 = document.querySelector('#btn1');
+        const $btn2 = document.querySelector('#btn2');
+
+        // 일반 함수 → this는 바인딩한 요소
+        $btn1.onclick = function(e) {
+            console.log('btn1 - this:', this); // <button id="btn1">
+            console.log('btn1 - e.currentTarget:', e.currentTarget); // 동일한 요소
+        }
+
+        // 화살표 함수 → this는 상위 스코프(window or 모듈 등)
+        $btn2.addEventListener('click', (e) => {
+            console.log('btn2 - this:', this); // 화살표 함수니까 window (또는 모듈의 this)
+            console.log('btn2 - e.currentTarget:', e.currentTarget); // <button id="btn2">
+        });
+    </script>
+
+    <p>
+        화살표 함수로 정의한 이벤트 핸들러 내부의 this는 상위 스코프의 this를 가리킴<br>
+        화살표 함수 자체의 this 바인딩을 가지지 않는다는 점에 유의해야함
+    </p>
+    <button id="btn3">Click it</button>
+    <button id="btn4">Click it</button>
+
+    <script>
+        const $btn3 = document.querySelector('#btn3');
+        const $btn4 = document.querySelector('#btn4');
+
+        // 일반 함수 → this는 바인딩한 요소
+        $btn3.onclick = function(e) {
+            console.log('btn3 - this:', this); // <button id="btn3">
+            console.log('btn3 - e.currentTarget:', e.currentTarget); // 동일한 요소
+        }
+
+        // 화살표 함수 → this는 상위 스코프(window or 모듈 등)
+        $btn4.addEventListener('click', (e) => {
+            console.log('btn4 - this:', this); // 화살표 함수니까 window (또는 모듈의 this)
+            console.log('btn4 - e.currentTarget:', e.currentTarget); // <button id="btn4">
+        });
+    </script>
+    
+</body>
+</html>

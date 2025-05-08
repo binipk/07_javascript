@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>콜백 지옥 vs Promise vs async/await</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f6fa;
+      padding: 20px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+
+    section {
+      background: #fff;
+      border: 1px solid #dcdde1;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      color: #2980b9;
+      margin-top: 0;
+    }
+
+    code {
+      background-color: #f0f0f0;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+    }
+
+    pre {
+      background-color: #f8f9fa;
+      padding: 12px;
+      overflow-x: auto;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    p {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>콜백 지옥 vs Promise vs async/await</h1>
+  <p>개념 설명과 함께 콘솔(F12)을 열고 실행 결과를 확인해보세요.</p>
+
+  <section>
+    <h2>1. 콜백 지옥 (Callback Hell)</h2>
+    <p>
+      콜백을 계속 중첩하면 코드가 오른쪽으로 들여쓰기되면서 <strong>가독성이 나빠지고 유지보수가 어려워지는 문제</strong>가 생깁니다.
+    </p>
+    <pre><code>
+// 10씩 증가시키는 비동기 함수 (콜백 기반)
+function increaseCallback(number, callback) {
+  setTimeout(() => {
+    const result = number + 10;
+    console.log("Callback:", result);
+    if (callback) callback(result);
+  }, 1000);
+}
+
+increaseCallback(0, result1 => {
+  increaseCallback(result1, result2 => {
+    increaseCallback(result2, result3 => {
+      console.log("최종 결과:", result3);
+    });
+  });
+});
+    </code></pre>
+  </section>
+
+  <section>
+    <h2>2. Promise</h2>
+    <p>
+      <code>Promise</code>를 사용하면 <code>then()</code>으로 <strong>비동기 흐름을 체이닝</strong>할 수 있고, 에러는 <code>catch()</code>, 종료 처리는 <code>finally()</code>로 깔끔하게 처리됩니다.
+    </p>
+    <pre><code>
+function increasePromise(number) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const result = number + 10;
+      if (result > 30) return reject(new Error("NumberTooBig"));
+      console.log("Promise:", result);
+      resolve(result);
+    }, 1000);
+  });
+}
+
+increasePromise(0)
+  .then(res1 => increasePromise(res1))
+  .then(res2 => increasePromise(res2))
+  .then(res3 => increasePromise(res3))
+  .then(res4 => increasePromise(res4)) // 실패 발생
+  .catch(err => console.error("에러 발생:", err.message))
+  .finally(() => console.log("작업 종료"));
+    </code></pre>
+  </section>
+
+  <section>
+    <h2>3. async / await</h2>
+    <p>
+      <code>async/await</code>는 <strong>Promise를 기반으로 하되</strong>, 마치 동기 코드처럼 작성할 수 있어서 <strong>가독성이 가장 좋습니다.</strong>
+    </p>
+    <pre><code>
+async function run() {
+  try {
+    let result = await increasePromise(0);
+    result = await increasePromise(result);
+    result = await increasePromise(result);
+    result = await increasePromise(result); // 실패 발생
+    console.log("최종 결과:", result);
+  } catch (e) {
+    console.error("에러 발생:", e.message);
+  } finally {
+    console.log("작업 종료");
+  }
+}
+
+run();
+    </code></pre>
+  </section>
+
+  <script>
+    // 1. 콜백 함수 정의
+    function increaseCallback(number, callback) {
+      setTimeout(() => {
+        const result = number + 10;
+        console.log("Callback:", result);
+        if (callback) callback(result);
+      }, 1000);
+    }
+
+    // 콜백 지옥 실행
+    increaseCallback(0, result1 => {
+      increaseCallback(result1, result2 => {
+        increaseCallback(result2, result3 => {
+          console.log("최종 결과:", result3);
+        });
+      });
+    });
+
+    // 2. Promise 함수 정의
+    function increasePromise(number) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          const result = number + 10;
+          if (result > 30) return reject(new Error("NumberTooBig"));
+          console.log("Promise:", result);
+          resolve(result);
+        }, 1000);
+      });
+    }
+
+    // Promise 실행
+    increasePromise(0)
+      .then(res1 => increasePromise(res1))
+      .then(res2 => increasePromise(res2))
+      .then(res3 => increasePromise(res3))
+      .then(res4 => increasePromise(res4)) // 실패
+      .catch(err => console.error("에러 발생:", err.message))
+      .finally(() => console.log("작업 종료"));
+
+    // 3. async/await 실행
+    async function run() {
+      try {
+        let result = await increasePromise(0);
+        result = await increasePromise(result);
+        result = await increasePromise(result);
+        result = await increasePromise(result); // 실패 발생
+        console.log("최종 결과:", result);
+      } catch (e) {
+        console.error("에러 발생:", e.message);
+      } finally {
+        console.log("작업 종료");
+      }
+    }
+
+    run();
+  </script>
+</body>
+</html>

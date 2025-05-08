@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>async/await 예제</title>
+</head>
+<body>
+  <h1>async/await로 비동기 처리하기</h1>
+  <p>F12를 눌러 콘솔에서 실행 흐름을 확인하세요.</p>
+
+  <script>
+    // 숫자를 10씩 증가시키는 비동기 함수 (1초 후 실행)
+    function increase(number) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          const result = number + 10;
+
+          // 실패 조건: 30보다 크면 에러 발생
+          if (result > 30) {
+            const e = new Error('NumberTooBig');
+            return reject(e);
+          }
+
+          // 성공 시 연산 결과를 resolve로 전달
+          resolve(result);
+        }, 1000); // 1초 후 실행
+      });
+    }
+
+    // async 함수 내부에서 await 키워드를 사용할 수 있음
+    // await 키워드를 사용하면 비동기 작업을 마치 동기처럼 작성할 수 있다
+    async function run() {
+      try {
+        let result = await increase(0);        // 1초 뒤 10
+        console.log("1단계:", result);         // 10
+
+        result = await increase(result);       // 1초 뒤 20
+        console.log("2단계:", result);         // 20
+
+        result = await increase(result);       // 1초 뒤 30
+        console.log("3단계:", result);         // 30
+
+        result = await increase(result);       // 1초 뒤 40 → 실패
+        console.log("4단계:", result);         // 실행되지 않음
+
+      } catch (error) {
+        // reject로 받은 에러 처리
+        console.error("에러 발생:", error.message);
+      } finally {
+        // 성공/실패 상관없이 무조건 실행됨
+        console.log("작업 종료");
+      }
+    }
+
+    // 실행
+    run();
+  </script>
+</body>
+</html>

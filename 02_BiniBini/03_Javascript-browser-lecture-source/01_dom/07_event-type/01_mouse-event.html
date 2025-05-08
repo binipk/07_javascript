@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>드래그/복사 방지</title>
+  <style>
+    .area {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background: #f9f9f9;
+      font-family: monospace;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .no-select {
+      user-select: none; /* 텍스트 선택 방지 */
+    }
+  </style>
+</head>
+<body>
+
+  <button>클릭해보세요</button>
+  <div class="area"></div>
+
+  <span class="no-select" id="protected-text">
+    이 영역은 드래그 해도, 또는 더블 클릭해도 선택되지 않도록 합니다
+  </span>
+
+  <div id="copy-block" class="no-select">
+    이 편지는 영국에서 최초로 시작되어 일년에 한 바퀴 돌면서
+    받는 사람에게 행운을 주었고 지금은 당신에게로 옮겨진 이 편지는
+    4일 안에 당신 곁을 떠나야 합니다. 이 편지를 포함해서 7통을
+    행운이 필요한 사람에게 보내 주셔야 합니다. 복사는 안됩니다.
+  </div>
+
+  <script>
+    const $btn = document.querySelector("button");
+    const $area = document.querySelector(".area");
+
+    // 마우스 이벤트 기록
+    $btn.onmousedown = (e) => {
+      $area.insertAdjacentHTML('beforeend', `mousedown button=${e.button}<br>`);
+    };
+    $btn.onmouseup = (e) => {
+      $area.insertAdjacentHTML('beforeend', `mouseup button=${e.button}<br>`);
+    };
+    $btn.onmouseover = (e) => {
+      $area.insertAdjacentHTML('beforeend', `mouseover button=${e.button}<br>`);
+    };
+    $btn.onmouseout = (e) => {
+      $area.insertAdjacentHTML('beforeend', `mouseout button=${e.button}<br>`);
+    };
+    $btn.onclick = (e) => {
+      $area.insertAdjacentHTML('beforeend', `click button=${e.button}<br>`);
+    };
+    $btn.ondblclick = (e) => {
+      $area.insertAdjacentHTML('beforeend', `dblclick button=${e.button}<br>`);
+    };
+    $btn.oncontextmenu = (e) => {
+      $area.insertAdjacentHTML('beforeend', `contextmenu button=${e.button}<br>`);
+    };
+
+    // 드래그/선택 방지
+    const $text = document.getElementById('protected-text');
+    $text.addEventListener('mousedown', e => e.preventDefault());
+    $text.addEventListener('mousemove', e => e.preventDefault());
+    $text.addEventListener('selectstart', e => e.preventDefault());
+
+    const $copyBlock = document.getElementById('copy-block');
+    $copyBlock.addEventListener('copy', (e) => {
+      alert('복사 불가능입니다!');
+      e.preventDefault();
+    });
+    $copyBlock.addEventListener('mousedown', e => e.preventDefault());
+    $copyBlock.addEventListener('mousemove', e => e.preventDefault());
+    $copyBlock.addEventListener('selectstart', e => e.preventDefault());
+  </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이벤트 전파 방지</title>
+</head>
+<body>
+    <h1>이벤트 전파 방지</h1>
+
+    <p>
+        이벤트 객체의 <code>stopPropagation()</code> 메서드는 이벤트 전파를 중지시킨다.<br>
+        예를 들어 특정 li 요소에서는 부모의 이벤트 핸들러가 작동하지 않도록 할 수 있다.
+    </p>
+
+    <ul id="drink">
+        <li>커피</li>
+        <li>콜라</li>
+        <li>우유</li>
+    </ul>
+
+    <script>
+        const $drink = document.querySelector("#drink");
+
+        // [1] ul에 이벤트 핸들러를 등록해서 li 클릭 시 글자색을 빨간색으로 변경
+        $drink.addEventListener("click", e => {
+            if (e.target.matches("li")) {
+                e.target.style.color = "red";
+                console.log("ul 이벤트 핸들러 실행됨");
+            }
+        });
+
+        // [2] 첫 번째 li (커피)만 선택해서 전파 중단 처리
+        const $coffee = document.querySelector("li"); // 첫 번째 li만 선택됨
+        $coffee.addEventListener("click", e => {
+            e.stopPropagation(); // 부모로 전파되지 않음
+            e.target.style.color = "blue";
+            console.log("커피 클릭 - 전파 중단");
+        });
+    </script>
+</body>
+</html>
